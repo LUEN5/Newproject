@@ -1,0 +1,56 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f5f6f8;
+}
+
+.container {
+  max-width: 980px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+
+header h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.5rem;
+}
+
+.meta {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+#room {
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  padding: 0.4rem 0.55rem;
+}
+
+.status {
+  color: #7d8590;
+  font-size: 0.9rem;
+}
+
+.participants {
+  font-size: 0.9rem;
+  color: #1f6feb;
+  min-height: 1.2rem;
+}
+
+.editor-panel {
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #d8dee4;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(140, 149, 159, 0.15);
+}
+
+#editor {
+  height: 70vh;
+}
