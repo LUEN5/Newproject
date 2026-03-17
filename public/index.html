@@ -8,42 +8,76 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="layout">
-      <aside class="sidebar">
-        <h2>文档列表</h2>
-        <div class="create-row">
-          <input id="titleInput" placeholder="输入新文档标题" />
-          <button id="createBtn">新建</button>
+    <main class="app-shell">
+      <section id="homeView" class="home-view">
+        <div class="hero">
+          <h1>实时多人协作文档</h1>
+          <p>创建文档后自动生成唯一分享码，发送分享码即可邀请他人加入同一文档实时编辑。</p>
         </div>
-        <ul id="docList" class="doc-list"></ul>
-      </aside>
 
-      <section class="container">
-        <header>
-          <h1 id="docTitle">多人文本编辑（类 Google Docs）</h1>
-          <div class="meta">
-            <label for="username">昵称：</label>
-            <input id="username" placeholder="输入你的昵称" />
-            <span id="status" class="status">连接中...</span>
-          </div>
-          <div id="participants" class="participants"></div>
-        </header>
+        <div class="panel-grid">
+          <section class="card">
+            <h2>创建新文档</h2>
+            <div class="field-group">
+              <label for="titleInput">文档标题</label>
+              <input id="titleInput" placeholder="例如：产品需求评审" />
+            </div>
+            <div class="field-group">
+              <label for="username">你的昵称</label>
+              <input id="username" placeholder="输入你的昵称" />
+            </div>
+            <button id="createBtn" class="primary-btn">创建文档并进入编辑</button>
+          </section>
 
-        <section class="editor-panel">
-          <div id="toolbar">
-            <span class="ql-formats">
-              <select class="ql-header"></select>
-              <button class="ql-bold"></button>
-              <button class="ql-italic"></button>
-              <button class="ql-underline"></button>
-            </span>
-            <span class="ql-formats">
-              <button class="ql-list" value="ordered"></button>
-              <button class="ql-list" value="bullet"></button>
-              <button class="ql-link"></button>
-            </span>
-          </div>
-          <div id="editor"></div>
+          <section class="card">
+            <h2>加入协作文档</h2>
+            <div class="field-group">
+              <label for="shareCodeInput">分享码</label>
+              <input id="shareCodeInput" placeholder="输入6位分享码" />
+            </div>
+            <button id="joinBtn" class="ghost-btn">通过分享码加入</button>
+            <p id="homeMessage" class="home-message"></p>
+          </section>
+        </div>
+      </section>
+
+      <section id="editorView" class="editor-view hidden">
+        <aside class="sidebar">
+          <h2>文档列表</h2>
+          <ul id="docList" class="doc-list"></ul>
+        </aside>
+
+        <section class="container">
+          <header>
+            <h1 id="docTitle">文档编辑区</h1>
+            <div class="meta">
+              <span id="status" class="status">连接中...</span>
+              <span id="participants" class="participants"></span>
+            </div>
+            <div class="doc-actions">
+              <span id="shareCodeBadge" class="share-code">分享码：-</span>
+              <button id="copyShareCodeBtn" class="ghost-btn">复制分享码</button>
+              <button id="exportBtn" class="primary-btn">导出 Word</button>
+              <button id="backHomeBtn" class="ghost-btn">返回主页</button>
+            </div>
+          </header>
+
+          <section class="editor-panel">
+            <div id="toolbar">
+              <span class="ql-formats">
+                <select class="ql-header"></select>
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+              </span>
+              <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-link"></button>
+              </span>
+            </div>
+            <div id="editor"></div>
+          </section>
         </section>
       </section>
     </main>
