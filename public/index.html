@@ -8,32 +8,43 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="container">
-      <header>
-        <h1>多人文本编辑（类 Google Docs）</h1>
-        <div class="meta">
-          <label for="room">文档房间：</label>
-          <input id="room" placeholder="输入房间名后回车" />
-          <span id="status" class="status">连接中...</span>
+    <main class="layout">
+      <aside class="sidebar">
+        <h2>文档列表</h2>
+        <div class="create-row">
+          <input id="titleInput" placeholder="输入新文档标题" />
+          <button id="createBtn">新建</button>
         </div>
-        <div id="participants" class="participants"></div>
-      </header>
+        <ul id="docList" class="doc-list"></ul>
+      </aside>
 
-      <section class="editor-panel">
-        <div id="toolbar">
-          <span class="ql-formats">
-            <select class="ql-header"></select>
-            <button class="ql-bold"></button>
-            <button class="ql-italic"></button>
-            <button class="ql-underline"></button>
-          </span>
-          <span class="ql-formats">
-            <button class="ql-list" value="ordered"></button>
-            <button class="ql-list" value="bullet"></button>
-            <button class="ql-link"></button>
-          </span>
-        </div>
-        <div id="editor"></div>
+      <section class="container">
+        <header>
+          <h1 id="docTitle">多人文本编辑（类 Google Docs）</h1>
+          <div class="meta">
+            <label for="username">昵称：</label>
+            <input id="username" placeholder="输入你的昵称" />
+            <span id="status" class="status">连接中...</span>
+          </div>
+          <div id="participants" class="participants"></div>
+        </header>
+
+        <section class="editor-panel">
+          <div id="toolbar">
+            <span class="ql-formats">
+              <select class="ql-header"></select>
+              <button class="ql-bold"></button>
+              <button class="ql-italic"></button>
+              <button class="ql-underline"></button>
+            </span>
+            <span class="ql-formats">
+              <button class="ql-list" value="ordered"></button>
+              <button class="ql-list" value="bullet"></button>
+              <button class="ql-link"></button>
+            </span>
+          </div>
+          <div id="editor"></div>
+        </section>
       </section>
     </main>
 
