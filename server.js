@@ -38,6 +38,25 @@ const saveDb = (db) => {
 
 const now = () => new Date().toISOString()
 const nextId = (rows, idField) => rows.reduce((max, row) => Math.max(max, row[idField]), 0) + 1
+const randomShareCode = () => Math.random().toString(36).slice(2, 8).toUpperCase()
+
+const ensureShareCode = (db) => {
+  db.documents.forEach((doc) => {
+    if (!doc.share_code) {
+      let code = randomShareCode()
+      const used = new Set(db.documents.map((item) => item.share_code).filter(Boolean))
+      while (used.has(code)) code = randomShareCode()
+      doc.share_code = code
+    }
+  })
+}
+
+const createUniqueShareCode = (db) => {
+  const used = new Set(db.documents.map((doc) => doc.share_code).filter(Boolean))
+  let code = randomShareCode()
+  while (used.has(code)) code = randomShareCode()
+  return code
+}
 
 const ensureUser = (db, username) => {
   const existing = db.users.find((u) => u.username === username)
@@ -60,6 +79,8 @@ app.get('/health', (_, res) => {
 
 app.get('/api/documents', (_, res) => {
   const db = loadDb()
+  ensureShareCode(db)
+  saveDb(db)
   const documents = db.documents
     .filter((doc) => doc.is_deleted === 0)
     .map((doc) => {
@@ -67,6 +88,7 @@ app.get('/api/documents', (_, res) => {
       return {
         document_id: doc.document_id,
         title: doc.title,
+        share_code: doc.share_code,
         updated_at: doc.updated_at,
         creator_name: creator?.username || 'anonymous'
       }
@@ -78,6 +100,7 @@ app.get('/api/documents', (_, res) => {
 
 app.post('/api/documents', (req, res) => {
   const db = loadDb()
+  ensureShareCode(db)
   const title = (req.body?.title || '').trim() || '未命名文档'
   const ownerName = (req.body?.ownerName || '').trim() || 'anonymous'
   const owner = ensureUser(db, ownerName)
@@ -86,6 +109,7 @@ app.post('/api/documents', (req, res) => {
     document_id: nextId(db.documents, 'document_id'),
     title,
     creator_id: owner.user_id,
+    share_code: createUniqueShareCode(db),
     created_at: now(),
     updated_at: now(),
     is_deleted: 0
@@ -94,11 +118,41 @@ app.post('/api/documents', (req, res) => {
   db.documents.push(document)
   saveDb(db)
 
-  res.status(201).json({ documentId: document.document_id, title: document.title })
+  res.status(201).json({
+    documentId: document.document_id,
+    title: document.title,
+    shareCode: document.share_code
+  })
+})
+
+app.post('/api/documents/join', (req, res) => {
+  const db = loadDb()
+  ensureShareCode(db)
+  saveDb(db)
+
+  const shareCode = (req.body?.shareCode || '').trim().toUpperCase()
+  if (!shareCode) {
+    res.status(400).json({ message: '请输入分享码' })
+    return
+  }
+
+  const doc = db.documents.find((item) => item.share_code === shareCode && item.is_deleted === 0)
+  if (!doc) {
+    res.status(404).json({ message: '分享码无效或文档不存在' })
+    return
+  }
+
+  res.json({
+    documentId: doc.document_id,
+    title: doc.title,
+    shareCode: doc.share_code
+  })
 })
 
 app.get('/api/documents/:id', (req, res) => {
   const db = loadDb()
+  ensureShareCode(db)
+  saveDb(db)
   const doc = getDocument(db, Number(req.params.id))
 
   if (!doc) {
